@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
-
     //DATOS
     var numeroRonda = 0
     var almacenamiento=arrayListOf<String>()
@@ -22,7 +21,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val comprobar:Button=findViewById(R.id.comprobar)
         val jugar: Button = findViewById(R.id.Jugar)
+        comprobar.setEnabled(false)
+        jugar.setEnabled(true)
         //Listener
         jugar.setOnClickListener {
 
@@ -31,9 +33,17 @@ class MainActivity : AppCompatActivity() {
             clickJugar()
             mostrarRonda()
             ejecutarSecuencia()
-            TurnoJugador()
-            ComprobarSecuencia()
+            comprobar.setEnabled(true)
+            jugar.setEnabled(false)
         }
+        comprobar.setOnClickListener{
+            turnoJugador()
+            comprobarSecuencia()
+            comprobar.setEnabled(false)
+            jugar.setEnabled(true)
+
+    }
+
     }
 
     fun clickJugar() {
@@ -116,20 +126,20 @@ class MainActivity : AppCompatActivity() {
             eleccion()
         }
     }
-    fun TurnoJugador() {
+    fun turnoJugador() {
 
         val rojo: Button = findViewById(R.id.rojo)
         val amarillo: Button = findViewById(R.id.amarillo)
         val verde: Button = findViewById(R.id.verde)
         val azul: Button = findViewById(R.id.azul)
-        amarillo.setOnClickListener {almacenamiento2.add("rojo")}
-        amarillo.setOnClickListener {almacenamiento2.add("amarillo")}
-        verde.setOnClickListener {almacenamiento2.add("verde")}
-        azul.setOnClickListener {almacenamiento2.add("azul")}
-
-
+        for(i in 1..4) {
+            rojo.setOnClickListener { almacenamiento2.add("rojo") }
+            amarillo.setOnClickListener { almacenamiento2.add("amarillo") }
+            verde.setOnClickListener { almacenamiento2.add("verde") }
+            azul.setOnClickListener { almacenamiento2.add("azul") }
+        }
     }
-    fun ComprobarSecuencia(){
+    fun comprobarSecuencia(){
         if (almacenamiento == almacenamiento2){
             Toast.makeText(this, "PERFECTO,SUBES DE NIVEL ", Toast.LENGTH_LONG).show()
         }else{
