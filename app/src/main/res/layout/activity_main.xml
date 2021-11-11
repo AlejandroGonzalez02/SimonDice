@@ -15,12 +15,12 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Azul"
+        app:layout_constraintTop_toBottomOf="@+id/azul"
         tools:visibility="visible" />
 
 
     <Button
-        android:id="@+id/Amarillo"
+        android:id="@+id/amarillo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginStart="40dp"
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/Verde"
+        android:id="@+id/verde"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="180dp"
@@ -39,12 +39,12 @@
         android:layout_marginBottom="14dp"
         android:backgroundTint="@color/verde"
         android:text="VERDE"
-        app:layout_constraintBottom_toTopOf="@+id/Azul"
+        app:layout_constraintBottom_toTopOf="@+id/azul"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/Azul"
+        android:id="@+id/azul"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="336dp"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/Rojo"
+        android:id="@+id/rojo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginStart="41dp"

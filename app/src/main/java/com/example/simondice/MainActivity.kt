@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
 
     //DATOS
     var numeroRonda = 0
+    var almacenamiento=arrayListOf<String>()
+    var almacenamiento2 = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +25,14 @@ class MainActivity : AppCompatActivity() {
         val jugar: Button = findViewById(R.id.Jugar)
         //Listener
         jugar.setOnClickListener {
+
+            almacenamiento.clear()
+            almacenamiento2.clear()
             clickJugar()
             mostrarRonda()
             ejecutarSecuencia()
+            TurnoJugador()
+            ComprobarSecuencia()
         }
     }
 
@@ -42,71 +49,94 @@ class MainActivity : AppCompatActivity() {
     //CORRUTINES
     suspend fun brojo(rojo: Button) {
         rojo.setBackgroundColor(resources.getColor(R.color.rojoClaro))
-        delay(2000L)
+        delay(500L)
         rojo.setBackgroundColor(resources.getColor(R.color.rojo))
     }
     suspend fun bamarillo(amarillo: Button) {
         amarillo.setBackgroundColor(resources.getColor(R.color.amarilloClaro))
-        delay(2000L)
+        delay(500L)
         amarillo.setBackgroundColor(resources.getColor(R.color.amarillo))
-        delay(2000L)
+        delay(500L)
     }
     suspend fun bverde(verde: Button) {
         verde.setBackgroundColor(resources.getColor(R.color.verdeClaro))
-        delay(2000L)
+        delay(500L)
         verde.setBackgroundColor(resources.getColor(R.color.verde))
-        delay(2000L)
+        delay(500L)
     }
     suspend fun bazul(azul: Button) {
         azul.setBackgroundColor(resources.getColor(R.color.azulClaro))
-        delay(2000L)
+        delay(500L)
         azul.setBackgroundColor(resources.getColor(R.color.azul))
-        delay(2000L)
+        delay(500L)
     }
 
-    suspend fun espera() {
-        delay(10000L)
 
-    }
-    fun ejecutarSecuencia() {
-
-
-        val rojo: Button = findViewById(R.id.Rojo)
-        val amarillo: Button = findViewById(R.id.Amarillo)
-        val azul: Button = findViewById(R.id.Verde)
-        val verde: Button = findViewById(R.id.Azul)
-
+    suspend fun eleccion() {
+        val rojo: Button = findViewById(R.id.rojo)
+        val amarillo: Button = findViewById(R.id.amarillo)
+        val verde: Button = findViewById(R.id.verde)
+        val azul: Button = findViewById(R.id.azul)
 
         for(i in 1..4){
+
+            delay(1000L)
             val randomInt = java.util.Random().nextInt(4) + 1
             val secuencia = when (randomInt) {
                 1 -> {
                     val job1 = GlobalScope.launch(Dispatchers.Main) {
                         brojo(rojo)
                     }
+                    almacenamiento.add("rojo")
+
                 }
                 2 -> {
                     val job2 = GlobalScope.launch(Dispatchers.Main) {
                         bamarillo(amarillo)
                     }
+                    almacenamiento.add("amarillo")
                 }
                 3 -> {
                     val job3 = GlobalScope.launch(Dispatchers.Main) {
                         bazul(azul)
                     }
+                    almacenamiento.add("azul")
                 }
                 else -> {
                     val job4 = GlobalScope.launch(Dispatchers.Main) {
                         bverde(verde)
                     }
+                    almacenamiento.add("verde")
                 }
             }
-            val espera = GlobalScope.launch(Dispatchers.Main) {espera()}
         }
     }
+    fun ejecutarSecuencia() {
+        val job = GlobalScope.launch(Dispatchers.Main) {
+            eleccion()
+        }
+    }
+    fun TurnoJugador() {
+
+        val rojo: Button = findViewById(R.id.rojo)
+        val amarillo: Button = findViewById(R.id.amarillo)
+        val verde: Button = findViewById(R.id.verde)
+        val azul: Button = findViewById(R.id.azul)
+        amarillo.setOnClickListener {almacenamiento2.add("rojo")}
+        amarillo.setOnClickListener {almacenamiento2.add("amarillo")}
+        verde.setOnClickListener {almacenamiento2.add("verde")}
+        azul.setOnClickListener {almacenamiento2.add("azul")}
 
 
-    fun comprobarSecuencia() {
-
+    }
+    fun ComprobarSecuencia(){
+        if (almacenamiento == almacenamiento2){
+            Toast.makeText(this, "PERFECTO,SUBES DE NIVEL ", Toast.LENGTH_LONG).show()
+        }else{
+            Toast.makeText(this, "DESCIENDES DE NIVEL ", Toast.LENGTH_LONG).show()
+            val ronda: TextView = findViewById(R.id.ronda)
+            numeroRonda--
+            ronda.text = ("RONDA: " + numeroRonda)
+        }
     }
 }
