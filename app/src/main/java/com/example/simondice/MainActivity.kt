@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     //DATOS
+    var numErrores=0
     var numeroRonda = 0
     var almacenamiento=arrayListOf<String>()
     var almacenamiento2 = arrayListOf<String>()
@@ -25,35 +26,53 @@ class MainActivity : AppCompatActivity() {
         val jugar: Button = findViewById(R.id.Jugar)
         comprobar.setEnabled(false)
         jugar.setEnabled(true)
-        //Listener
+
+        //QUE PASA CANDO LLE DAN A XOGAR
         jugar.setOnClickListener {
 
+            //LIMPAMOS ARRAYS
             almacenamiento.clear()
             almacenamiento2.clear()
+
+            //PARA QUE NON PODAN PREMER NINGÚN BOTON
+            val rojo: Button = findViewById(R.id.rojo)
+            val amarillo: Button = findViewById(R.id.amarillo)
+            val verde: Button = findViewById(R.id.verde)
+            val azul: Button = findViewById(R.id.azul)
+            rojo.setEnabled(false);
+            amarillo.setEnabled(false);
+            verde.setEnabled(false);
+            azul.setEnabled(false);
+
             clickJugar()
             mostrarRonda()
             ejecutarSecuencia()
             comprobar.setEnabled(true)
             jugar.setEnabled(false)
-        }
-        comprobar.setOnClickListener{
             turnoJugador()
+        }
+
+        //QUE PASA CANDO LLE DAN A COMPROBAR
+        comprobar.setOnClickListener{
             comprobarSecuencia()
             comprobar.setEnabled(false)
             jugar.setEnabled(true)
+            println(almacenamiento)
+            println(almacenamiento2)
 
     }
 
     }
 
     fun clickJugar() {
-        Toast.makeText(this, "OLE ", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "RECUERDA LA SECUENCIA!!!", Toast.LENGTH_LONG).show()
     }
 
     fun mostrarRonda() {
+        //CONTADOR DE RONDA
         val ronda: TextView = findViewById(R.id.ronda)
         numeroRonda++
-        ronda.text = ("RONDA: " + numeroRonda)
+        ronda.text = ("RONDAS BIEN: " + numeroRonda)
     }
 
     //CORRUTINES
@@ -101,9 +120,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 2 -> {
-                    val job2 = GlobalScope.launch(Dispatchers.Main) {
-                        bamarillo(amarillo)
-                    }
+                    val job2 = GlobalScope.launch(Dispatchers.Main) {bamarillo(amarillo)}
                     almacenamiento.add("amarillo")
                 }
                 3 -> {
@@ -120,33 +137,48 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        delay(350L)
+        //DEIXAMOS QUE ESCRIBAN
+        rojo.setEnabled(true);
+        amarillo.setEnabled(true);
+        verde.setEnabled(true);
+        azul.setEnabled(true);
+        Toast.makeText(this, "REPITE LA SECUENCIA:", Toast.LENGTH_LONG).show()
     }
     fun ejecutarSecuencia() {
         val job = GlobalScope.launch(Dispatchers.Main) {
             eleccion()
         }
+
     }
     fun turnoJugador() {
-
+        //CHAMAMOS AOS BOTONS
         val rojo: Button = findViewById(R.id.rojo)
         val amarillo: Button = findViewById(R.id.amarillo)
         val verde: Button = findViewById(R.id.verde)
         val azul: Button = findViewById(R.id.azul)
-        for(i in 1..4) {
-            rojo.setOnClickListener { almacenamiento2.add("rojo") }
-            amarillo.setOnClickListener { almacenamiento2.add("amarillo") }
-            verde.setOnClickListener { almacenamiento2.add("verde") }
-            azul.setOnClickListener { almacenamiento2.add("azul") }
-        }
+
+        //GARDAMOS SECUENCIA
+            rojo.setOnClickListener(){ almacenamiento2.add("rojo") }
+            amarillo.setOnClickListener(){ almacenamiento2.add("amarillo") }
+            azul.setOnClickListener(){ almacenamiento2.add("azul") }
+            verde.setOnClickListener(){ almacenamiento2.add("verde") }
+
+        //NON DEIXAMOS QUE VOLVAN PREMER NOS BOTONS
+        rojo.setEnabled(false);
+        amarillo.setEnabled(false);
+        verde.setEnabled(false);
+        azul.setEnabled(false);
     }
     fun comprobarSecuencia(){
         if (almacenamiento == almacenamiento2){
-            Toast.makeText(this, "PERFECTO,SUBES DE NIVEL ", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "PERFECTO \uD83D\uDE01", Toast.LENGTH_LONG).show()
         }else{
-            Toast.makeText(this, "DESCIENDES DE NIVEL ", Toast.LENGTH_LONG).show()
-            val ronda: TextView = findViewById(R.id.ronda)
-            numeroRonda--
-            ronda.text = ("RONDA: " + numeroRonda)
+            Toast.makeText(this, "FALLASTE \uD83D\uDE22", Toast.LENGTH_LONG).show()
+
+            val errores: TextView=findViewById(R.id.errores)
+            numErrores++
+            errores.text=("RONDAS MAL: "+numErrores)
         }
     }
 }
